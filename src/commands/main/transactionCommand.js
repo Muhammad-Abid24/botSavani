@@ -181,13 +181,13 @@ class TransactionCommand {
             const data = this.transactionData.get(user);
             console.log('DEBUG: Attempting to save to Google Sheets:', data);
 
-            // Check environment variables
+            // Check environment variables (with fallback for private key)
             console.log('DEBUG: GOOGLE_SHEET_ID:', process.env.GOOGLE_SHEET_ID ? 'SET' : 'NOT SET');
             console.log('DEBUG: GOOGLE_SERVICE_ACCOUNT_EMAIL:', process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL ? 'SET' : 'NOT SET');
-            console.log('DEBUG: GOOGLE_PRIVATE_KEY:', process.env.GOOGLE_PRIVATE_KEY ? 'SET' : 'NOT SET');
+            console.log('DEBUG: GOOGLE_PRIVATE_KEY:', process.env.GOOGLE_PRIVATE_KEY ? 'SET' : 'NOT SET (will use fallback)');
 
-            if (!process.env.GOOGLE_SHEET_ID || !process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || !process.env.GOOGLE_PRIVATE_KEY) {
-                console.log('DEBUG: Missing Google Sheets environment variables');
+            if (!process.env.GOOGLE_SHEET_ID || !process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL) {
+                console.log('DEBUG: Missing required Google Sheets environment variables');
                 await this.bot.reply(ctx, '❌ Google Sheets credentials not configured. Please check environment variables.', { parse_mode: 'Markdown' });
                 return;
             }
