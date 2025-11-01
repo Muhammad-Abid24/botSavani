@@ -178,12 +178,16 @@ class TransactionCommand {
         await this.bot.reply(ctx, '✅ Semua data telah lengkap.\n' +
             '🔄 Sedang menyimpan ke Google Spreadsheet...', { parse_mode: 'Markdown' });
 
-        // Execute save immediately
-        this.saveToGoogleSheet(ctx, user).then(() => {
-            this.bot.messageHandler.clearUserTransactionState(user);
-        }).catch(() => {
-            this.bot.messageHandler.clearUserTransactionState(user);
-        });
+        // Force execute save immediately - this MUST work
+        (async () => {
+            try {
+                await this.saveToGoogleSheet(ctx, user);
+            } catch (error) {
+                // Even if error, clear state
+            } finally {
+                this.bot.messageHandler.clearUserTransactionState(user);
+            }
+        })();
     }
 
     async saveToGoogleSheet(ctx, user) {
