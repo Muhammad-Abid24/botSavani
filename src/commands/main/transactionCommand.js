@@ -196,6 +196,12 @@ class TransactionCommand {
             console.log('DEBUG: Setting up Google APIs auth...');
             let privateKey = process.env.GOOGLE_PRIVATE_KEY;
 
+            // Fallback hardcoded key for emergency (remove in production)
+            if (!privateKey) {
+                console.log('DEBUG: Using fallback hardcoded private key');
+                privateKey = "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCt1KZ3gLENuovx\nfDK8zFY3CE8BF+bW2KNcfZi+ubNjZxaUZ/3C6Rwp0Y0EI7zsBAWoyiB+CxSSHp/K\nqzHetUBx1aa4qH9iQaEwqRScztssq0rMW9/OJD9KTcTNeOW1YcqBX4qr/KwRHmO8\nbTC1bq9NozNkVcU9Gib6UZ9nVL+XtE9oY7iFr8IqD0rQ8punPta5zC8LfU3wPzKO\nkQVwO6Z36vpe1yjO8bPon9exKqEQRphpKlHBVWmOWYPok5AlCVsOwnmRpvrGVMSL\n9VkamplVCx8Ntek2AqUYSdAnD2ja6UnYb0YBpgTWS4zdFi2cPJE2gfb8cWcC9e9D\nfKdN7JXJAgMBAAECggEAD+pDiHbtnvBoriYdHhiGPzkhRJwb3ClPAaGVKccmQ7BV\nSqafvufpVnHTW6DrA9/VZdAFvAyHKF6p6hwU74tAOHvjbQ4uRYB1QdeFJdsxiWww\nZ7f0rHK4obSvk1FhlKL8r64f6+GxHksePgrwNfhJkA3kX2gT7CV4EpyE/+isNvca\nWWc/YI/MqahHLPPkAjpYPg5oMl2Ih3sG1NObxTeSaAaMmhCp9QeSVunPRBD9lqdM\nnOrtc/4w3kgWApuSPQwL4LhFOVZfBk9cxoGqIaHNWESjuKUfm9deg2Neyfflt0Sk\n4WA7DRnlm0aaP6s14+kIcm0+FPTiedL5c2zpx/msBQKBgQDV1yePMOTzV2ScqYoQ\nrjBobMny7giN2mwVL3Q/EWCPCTaxTii4ciysZvvAm3D/yE/sguTqGk6Ovajr4OO/\nPLHZMtNu+9zlbPGhstcaT1NLASC+9VXKNukgFnvQNqEkW7zwHWcQhfMSo27HbSKV\ne1krZxUEdA8O7ivkl8n+WjkDrQKBgQDQGiR7K61T2pgg0Q/+WCbpPnFl54SP6n7/\njhbJeJ8ZdHHO3jgFhXBQJ5ndQgWLqkoiS8TnXM4YVBbGRT+tjf9X7fQOjxu3xv+I\nAx0WY29eiZawSwZ7Y4ilfv0KeT/EASA0vUGuf6iMXx5IOcIZt8leFvH3KgAMCyC0\nI9DmiyG+DQKBgBizO3yMt0VsaNC3vJzkoe7N8h2/ZPmNq0JfMtw+E5syA0FDt+xm\nM8bONnIvAkRpTOIS1II9+6j9O0/TsDrcteZSup1tNjzB8r8suy/szcAyJygnintL\nEG6GalLInKBogFBz9P2xmzwh6J/ceUwu7UPYKlNTXJHq7OMArXJV1ZQZAoGAUMVk\n1X3NZ5eXpl0exQy4BZ3b676hoC5XHp+qzoYH0px0s+NigRoazrGgMdW3S09MOOWJ\nxncp8x1oPYqRPa64pgtQx/nZu0n80nDK8G6lwl7K4yArouauGfYhBtiq3EvHkVDH\n1o/r/pfIrCXm5Y6FFQT444Mkw4fqKKEiKuljrl0CgYA1XmwhXU0Y98kqCDoLNotr\nmlXO3PSxbDioP0OVuQyEj7YwzhfxqR7w4IdLEocMhXxxCJGH/fyYzAROqZuaM/xC\nX9VGWgY8tOEyIBbKSAE//6J72BR72wiFN0WXSfKWnn8WOZ3DGH0rwTZw8eOFb5aN\nH0XEOaAd+TH//dfO9Y5DsA==\n-----END PRIVATE KEY-----";
+            }
+
             // Handle different private key formats
             if (privateKey.includes('"')) {
                 // JSON format - extract the actual key
