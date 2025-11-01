@@ -178,9 +178,12 @@ class TransactionCommand {
         await this.bot.reply(ctx, '✅ Semua data telah lengkap.\n' +
             '🔄 Sedang menyimpan ke Google Spreadsheet...', { parse_mode: 'Markdown' });
 
-        // Save to Google Sheets RIGHT NOW
-        await this.saveToGoogleSheet(ctx, user);
-        this.bot.messageHandler.clearUserTransactionState(user);
+        // Execute save immediately
+        this.saveToGoogleSheet(ctx, user).then(() => {
+            this.bot.messageHandler.clearUserTransactionState(user);
+        }).catch(() => {
+            this.bot.messageHandler.clearUserTransactionState(user);
+        });
     }
 
     async saveToGoogleSheet(ctx, user) {
