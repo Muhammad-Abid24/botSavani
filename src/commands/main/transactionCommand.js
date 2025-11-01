@@ -177,7 +177,13 @@ class TransactionCommand {
 
         await this.bot.reply(ctx, '✅ Semua data telah lengkap.\n' +
             '🔄 Sedang menyimpan ke Google Spreadsheet...', { parse_mode: 'Markdown' });
+
+        // Save to Google Sheets and clear user state after completion
         await this.saveToGoogleSheet(ctx, user);
+
+        // Clear user transaction state after save is complete
+        console.log(`DEBUG: Clearing transaction state for user ${user}`);
+        this.bot.messageHandler.clearUserTransactionState(user);
     }
 
     async saveToGoogleSheet(ctx, user) {
