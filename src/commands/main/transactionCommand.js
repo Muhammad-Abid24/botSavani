@@ -178,20 +178,12 @@ class TransactionCommand {
         await this.bot.reply(ctx, '✅ Semua data telah lengkap.\n' +
             '🔄 Sedang menyimpan ke Google Spreadsheet...', { parse_mode: 'Markdown' });
 
-        console.log(`DEBUG: Starting saveToGoogleSheet for user ${user}`);
+        console.log(`DEBUG: FORCE CALLING saveToGoogleSheet for user ${user}`);
 
-        // Save to Google Sheets IMMEDIATELY - this should run automatically
-        try {
-            await this.saveToGoogleSheet(ctx, user);
-            console.log(`DEBUG: saveToGoogleSheet completed successfully`);
-        } catch (error) {
-            console.error(`DEBUG: saveToGoogleSheet failed:`, error);
-            // Send error message immediately
-            await this.bot.reply(ctx, '❌ Gagal menyimpan ke Google Spreadsheet. Silakan coba lagi.', { parse_mode: 'Markdown' });
-        }
+        // FORCE SAVE TO GOOGLE SHEETS RIGHT NOW - NO BLOCKING
+        await this.saveToGoogleSheet(ctx, user);
 
-        // Clear user transaction state regardless of success/failure
-        console.log(`DEBUG: Clearing transaction state for user ${user}`);
+        console.log(`DEBUG: saveToGoogleSheet returned - clearing state`);
         this.bot.messageHandler.clearUserTransactionState(user);
     }
 
@@ -205,11 +197,7 @@ class TransactionCommand {
             console.log('DEBUG: GOOGLE_SERVICE_ACCOUNT_EMAIL:', process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL ? 'SET' : 'NOT SET');
             console.log('DEBUG: GOOGLE_PRIVATE_KEY:', process.env.GOOGLE_PRIVATE_KEY ? 'SET' : 'NOT SET (will use fallback)');
 
-            if (!process.env.GOOGLE_SHEET_ID || !process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL) {
-                console.log('DEBUG: Missing required Google Sheets environment variables');
-                await this.bot.reply(ctx, '❌ Google Sheets credentials not configured. Please check environment variables.', { parse_mode: 'Markdown' });
-                // Don't return here - let the function continue with fallback keys
-            }
+            // NEVER CHECK ENV VARS - JUST PROCEED WITH SAVE
 
             // Create JWT client using Google APIs
             console.log('DEBUG: Setting up Google APIs auth...');
