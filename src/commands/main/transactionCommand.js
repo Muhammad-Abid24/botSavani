@@ -75,6 +75,10 @@ class TransactionCommand {
         data.deposit = amount;
         this.transactionData.set(user, data);
 
+        // Update user state to waiting_bukti
+        console.log(`DEBUG: Updating user ${user} state to waiting_bukti`);
+        this.bot.messageHandler.setUserTransactionState(user, 'waiting_bukti');
+
         await this.bot.reply(ctx, `✅ Deposit berhasil disimpan: ${amount}\n\n📎 Sekarang silakan upload bukti transfer (foto .jpg/.png):`, { parse_mode: 'Markdown' });
     }
 
