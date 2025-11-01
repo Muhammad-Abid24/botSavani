@@ -199,7 +199,7 @@ class TransactionCommand {
             if (!process.env.GOOGLE_SHEET_ID || !process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL) {
                 console.log('DEBUG: Missing required Google Sheets environment variables');
                 await this.bot.reply(ctx, '❌ Google Sheets credentials not configured. Please check environment variables.', { parse_mode: 'Markdown' });
-                return;
+                // Don't return here - let the function continue with fallback keys
             }
 
             // Create JWT client using Google APIs
