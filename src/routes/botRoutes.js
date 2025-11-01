@@ -66,12 +66,17 @@ class BotRoutes {
           console.log('DEBUG: User is in waiting_bukti state, processing document...');
           const document = ctx.message.document;
 
-          // Check if document is a photo
-          if (document.mime_type && document.mime_type.startsWith('image/')) {
+          // Check if document is a photo (JPG, JPEG, PNG)
+          if (document.mime_type && (
+            document.mime_type.startsWith('image/') ||
+            document.file_name.toLowerCase().endsWith('.jpg') ||
+            document.file_name.toLowerCase().endsWith('.jpeg') ||
+            document.file_name.toLowerCase().endsWith('.png')
+          )) {
             console.log('DEBUG: Document is an image, processing as bukti...');
             await this.controller.handleBuktiInput(ctx, document);
           } else {
-            await this.controller.reply(ctx, '❌ Document bukan gambar! Silakan upload foto dengan format .jpg/.png.', { parse_mode: 'Markdown' });
+            await this.controller.reply(ctx, '❌ Document bukan gambar! Silakan upload foto dengan format .jpg/.jpeg/.png.', { parse_mode: 'Markdown' });
           }
         } else {
           await this.controller.reply(ctx, '📎 Terima kasih untuk dokumennya! Upload bukti hanya bisa dilakukan saat proses transaksi.');
