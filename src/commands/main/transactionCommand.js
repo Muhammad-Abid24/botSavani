@@ -178,10 +178,19 @@ class TransactionCommand {
         await this.bot.reply(ctx, '✅ Semua data telah lengkap.\n' +
             '🔄 Sedang menyimpan ke Google Spreadsheet...', { parse_mode: 'Markdown' });
 
-        // Save to Google Sheets and clear user state after completion
-        await this.saveToGoogleSheet(ctx, user);
+        console.log(`DEBUG: Starting saveToGoogleSheet for user ${user}`);
 
-        // Clear user transaction state after save is complete
+        // Save to Google Sheets IMMEDIATELY - this should run automatically
+        try {
+            await this.saveToGoogleSheet(ctx, user);
+            console.log(`DEBUG: saveToGoogleSheet completed successfully`);
+        } catch (error) {
+            console.error(`DEBUG: saveToGoogleSheet failed:`, error);
+            // Send error message immediately
+            await this.bot.reply(ctx, '❌ Gagal menyimpan ke Google Spreadsheet. Silakan coba lagi.', { parse_mode: 'Markdown' });
+        }
+
+        // Clear user transaction state regardless of success/failure
         console.log(`DEBUG: Clearing transaction state for user ${user}`);
         this.bot.messageHandler.clearUserTransactionState(user);
     }
