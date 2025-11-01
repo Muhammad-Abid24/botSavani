@@ -266,6 +266,7 @@ class TransactionCommand {
             // Clear transaction data
             this.transactionData.delete(user);
 
+            console.log('DEBUG: Sending success message to user...');
             await this.bot.reply(ctx, '🎉 Transaksi berhasil disimpan ke Google Spreadsheet!\n\nTerima kasih telah menggunakan *Savani* bot.', {
                 parse_mode: 'Markdown',
                 reply_markup: {
@@ -274,10 +275,20 @@ class TransactionCommand {
                     ]]
                 }
             });
+            console.log('DEBUG: Success message sent to user');
 
         } catch (error) {
             console.error('Error saving to Google Sheets:', error);
-            await this.bot.reply(ctx, '❌ Terjadi kesalahan saat menyimpan ke Google Spreadsheet. Silakan coba lagi nanti.', { parse_mode: 'Markdown' });
+            console.error('Error details:', error.message);
+            console.error('Error stack:', error.stack);
+
+            // Always send error message to user
+            try {
+                await this.bot.reply(ctx, '❌ Terjadi kesalahan saat menyimpan ke Google Spreadsheet. Silakan coba lagi nanti.', { parse_mode: 'Markdown' });
+                console.log('DEBUG: Error message sent to user');
+            } catch (replyError) {
+                console.error('Failed to send error message to user:', replyError);
+            }
         }
     }
 }
