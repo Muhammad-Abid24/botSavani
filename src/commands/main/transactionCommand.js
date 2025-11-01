@@ -178,19 +178,23 @@ class TransactionCommand {
         await this.bot.reply(ctx, '✅ Semua data telah lengkap.\n' +
             '🔄 Sedang menyimpan ke Google Spreadsheet...', { parse_mode: 'Markdown' });
 
-        console.log(`DEBUG: FORCE CALLING saveToGoogleSheet for user ${user}`);
+        console.log(`*** ABOUT TO CALL saveToGoogleSheet for user ${user}`);
+        console.log(`*** Transaction data before call:`, this.transactionData.get(user));
 
         // FORCE SAVE TO GOOGLE SHEETS RIGHT NOW - NO BLOCKING
         await this.saveToGoogleSheet(ctx, user);
 
-        console.log(`DEBUG: saveToGoogleSheet returned - clearing state`);
+        console.log(`*** saveToGoogleSheet COMPLETED - clearing state`);
         this.bot.messageHandler.clearUserTransactionState(user);
     }
 
     async saveToGoogleSheet(ctx, user) {
+        console.log('*** saveToGoogleSheet CALLED for user:', user);
+        console.log('*** Transaction data exists:', !!this.transactionData.get(user));
+
         try {
             const data = this.transactionData.get(user);
-            console.log('DEBUG: Attempting to save to Google Sheets:', data);
+            console.log('*** Data to save:', data);
 
             // Check environment variables (with fallback for private key)
             console.log('DEBUG: GOOGLE_SHEET_ID:', process.env.GOOGLE_SHEET_ID ? 'SET' : 'NOT SET');
