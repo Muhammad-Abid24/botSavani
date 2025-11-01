@@ -194,9 +194,25 @@ class TransactionCommand {
 
             // Create JWT client using Google APIs
             console.log('DEBUG: Setting up Google APIs auth...');
+            let privateKey = process.env.GOOGLE_PRIVATE_KEY;
+
+            // Handle different private key formats
+            if (privateKey.includes('"')) {
+                // JSON format - extract the actual key
+                const keyMatch = privateKey.match(/"private_key":\s*"([^"]+)"/);
+                if (keyMatch) {
+                    privateKey = keyMatch[1].replace(/\\n/g, '\n');
+                }
+            } else {
+                // Already in correct format, just handle escaped newlines
+                privateKey = privateKey.replace(/\\n/g, '\n');
+            }
+
+            console.log('DEBUG: Processed private key length:', privateKey.length);
+
             const auth = new google.auth.JWT({
                 email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-                key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+                key: privateKey,
                 scopes: ['https://www.googleapis.com/auth/spreadsheets']
             });
 
